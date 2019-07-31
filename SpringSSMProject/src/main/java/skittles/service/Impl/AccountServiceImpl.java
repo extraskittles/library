@@ -21,4 +21,11 @@ public class AccountServiceImpl implements AccountService {
     public void save(Account account) {
             accountDao.save(account);
     }
+
+    @Override
+    public void update(long loginTime) {
+        accountDao.update(loginTime);
+    }
+
+
 }

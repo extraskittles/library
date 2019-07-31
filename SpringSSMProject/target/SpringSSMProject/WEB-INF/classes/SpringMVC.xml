@@ -16,5 +16,14 @@
         <property name="prefix" value="/WEB-INF/pages/"></property>
         <property name="suffix" value=".jsp"></property>
     </bean>
+
+    <mvc:resources mapping="/js/**" location="/js/"></mvc:resources>
+    <mvc:resources mapping="/css/**" location="/css/"></mvc:resources>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="skittles.interceptor.RegisterInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
     <mvc:annotation-driven></mvc:annotation-driven>
 </beans>

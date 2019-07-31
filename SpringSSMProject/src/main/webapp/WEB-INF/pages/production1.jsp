@@ -10,7 +10,7 @@
 <head>
     <title>Title</title>
 </head>
-<body> &nbsp;&nbsp;&nbsp;&nbsp;欢迎用户:</h3>
+<body> &nbsp;&nbsp;&nbsp;&nbsp;欢迎用户:
 <a href="">${name}</a><br>
 <a href="">商品1</a><br>
 <a href="">商品2</a><br>

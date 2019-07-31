@@ -1,19 +1,17 @@
 package skittles.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import skittles.service.AccountService;
+//访问不同的商品页
 @Controller
 public class Production {
-    @RequestMapping("test")
-    public String test(){
-        return "test";
-    }
-
-
+    @Autowired
+    AccountService accountService;
     @RequestMapping("production1")
-    public String production1(){
-        return "production1";
+    public String production1()  {
+       return "production1";
     }
 
     @RequestMapping("production2")

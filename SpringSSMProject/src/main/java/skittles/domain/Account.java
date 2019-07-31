@@ -6,6 +6,7 @@ public class Account implements Serializable {
      private Integer id;
      private String name;
      private String password;
+     private  Long loginTime;
 
     public Integer getId() {
         return id;
@@ -31,12 +32,21 @@ public class Account implements Serializable {
         this.password = password;
     }
 
+    public Long getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Long loginTime) {
+        this.loginTime = loginTime;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", password=" + password +
+                ", password='" + password + '\'' +
+                ", loginTime=" + loginTime +
                 '}';
     }
 }
