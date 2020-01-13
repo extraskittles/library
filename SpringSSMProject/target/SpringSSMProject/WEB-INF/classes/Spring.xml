@@ -12,15 +12,18 @@
        http://www.springframework.org/schema/aop/spring-aop.xsd
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!--spring扫描skittles包所有除了controller的注解-->
     <context:component-scan base-package="skittles">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+    <!--jdbc的配置-->
     <bean id="comboPooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ssm?useUnicode=true&amp;characterEncoding=utf8"/>
+        <property name="jdbcUrl" value="jdbc:mysql://111.231.237.220:3306/library?useUnicode=true&amp;characterEncoding=utf8"/>
         <property name="user" value="root"/>
-        <property name="password" value="root"/>
+        <property name="password" value="skittles"/>
     </bean>
+    <!--sqlSession工厂和dao代理的配置-->
     <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="comboPooledDataSource"></property>
     </bean>

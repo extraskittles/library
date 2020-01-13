@@ -9,17 +9,17 @@
 <html>
 <head>
     <title>Title</title>
-<%--    <link href="css/register.css" rel="stylesheet"/>--%>
+<%--    <link href="css/register.css" rel="stylesheet"/>
     <script src="js/jquery-1.3.2.min.js"></script>
-    <script src="js/register.js"></script>
+    <script src="js/register.js"></script>--%>
 </head>
 <body>
 <div>
 <h3>注册账号</h3>
 <form action="/register_success" method="post">
-    <input id="userName" type="text" name="name" placeholder="请设置用户名"><span id="tips"></span><br>
+    <input type="text" name="userName" placeholder="请设置用户名"><span id="tips"></span><br>
     <input type="password" name="password" placeholder="请设置注册密码"><br>
-    <input type="submit" value="注册">&nbsp;<a href="/index.jsp">返回登录</a>
+    <input type="submit" value="注册">&nbsp;&nbsp;&nbsp;&nbsp;<a href="/index.jsp">返回登录</a>
 </form>
 </div>
 </body>

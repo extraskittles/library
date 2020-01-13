@@ -1,3 +1,6 @@
+$(function () {
+
+})
 function check () {
     var userName = $("#userName").val()
     var password = $("#password").val()

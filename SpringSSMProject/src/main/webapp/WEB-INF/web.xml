@@ -4,6 +4,7 @@
 
 <web-app>
     <display-name>Archetype Created Web Application</display-name>
+    <!--通过过滤器设置UTF-8编码-->
     <filter>
         <filter-name>characterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -17,15 +18,16 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-
+<!--开启监听器，监听服务器生成context对象时加载Spring.xml配置文件-->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+    <!--如果没有设置contextConfigLocation的初始参数则会使用默认参数WEB-INF路径下的application.xml文件-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:Spring.xml</param-value>
     </context-param>
-
+<!--开启前端控制器，并且加载SpringMVC.xml配置文件-->
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -40,3 +42,4 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 </web-app>
+

@@ -1,62 +1,82 @@
 package skittles.controller;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import skittles.domain.Account;
-import skittles.service.AccountService;
+import org.springframework.web.bind.annotation.RequestMethod;
+import skittles.dao.UserDao;
+import skittles.domain.User;
+import skittles.service.ReaderService;
+import skittles.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
-@org.springframework.stereotype.Controller
+
+@Controller
 public class Login_register {
     @Autowired
-    AccountService accountService;
-//处理登陆的请求，并返回访问商品首页；未登陆以访客模式访问。登陆了让session的isLogin=true，并访问商品首页。
-    @RequestMapping("production")
-    public String production(HttpServletRequest request, HttpServletResponse response, Account account) throws ServletException, IOException {
-        if (account.getName() == null) {
-            return "production";
-        }
-        try {
-            String name = account.getName();
-            String password = account.getPassword();
-            if (password.equals(accountService.findByName(name).getPassword())) {
-                request.getSession().setAttribute("name", name);
-                request.getSession().setAttribute("isLogin", true);
-                long loginTime =System.currentTimeMillis();
-                request.getSession().setAttribute("loginTime", loginTime);
-                accountService.update(loginTime);
-            } else {
-                request.getRequestDispatcher(request.getContextPath() + "/index.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            request.getRequestDispatcher(request.getContextPath() + "/index.jsp").forward(request, response);
-        }
-        return "production";
-    }
-//处理注册的请求，返回注册成功页面
+    UserService userService;
+    @Autowired
+    ReaderService readerService;
+//    处理注册的请求,并返回提示成功页面
     @RequestMapping("register_success")
-    public String register_success(HttpServletRequest request, HttpServletResponse response, Account account)  {
-        String name = account.getName();
-        try {
-            String DataName = accountService.findByName(name).getName();
-            request.getRequestDispatcher(request.getContextPath() + "/register").forward(request, response);
-        } catch (Exception e) {
-            accountService.save(account);
-        }
+    public String register(User user){
+        userService.addUser(user);
         return "register_success";
     }
-//处理注销用户的请求
+
+    //处理修改密码的请求，并返回修改密码成功页面
+    @RequestMapping("setPassword")
+    public String setPassword(HttpServletRequest request,String oldPassword,String newPassword,String confirmPassword){
+        String userName = (String) request.getSession().getAttribute("userName");
+        boolean truePassword = userService.updateUser(userName,oldPassword,newPassword,confirmPassword);
+        if(truePassword){
+            return "redirect:/index.jsp";
+        }else {
+            if("管理员".equals(userService.findByName(userName).getRoot())){
+                return "redirect:/tosetPassword";
+            }else {
+                return "redirect:myPassword";
+            }
+        }
+    }
+    //发送请求来到注册页面
+    @RequestMapping("register")
+    public String register(){
+        return "register";
+    }
+
+    //处理登陆的请求，正确重定向图书管理首页，错误重定向到登陆页面
+    @RequestMapping("handleLibrary")
+    public String handleLibrary(HttpServletRequest request,User user){
+        Map<String,Object> map = userService.login(user);
+        boolean truePassword = (boolean) map.get("truePassword");
+        if(truePassword){
+            request.getSession().setAttribute("isLogin",true);
+            request.getSession().setAttribute("userName",user.getUserName());
+            request.getSession().setAttribute("readerNum",userService.findByName(user.getUserName()).getReaderNum());
+            request.getSession().setAttribute("reader",readerService.findReaderByReaderNum(userService.findByName(user.getUserName()).getReaderNum()));
+            if("周兆荣".equals(user.getUserName())){
+                return "redirect:/libraries";
+            }else {
+                return "redirect:/myLibrary";
+            }
+        }else{
+            return "redirect:/index.jsp";
+        }
+    }
+    //发送请求来到图书馆首页
+    @RequestMapping("libraries")
+    public String library(){
+        return "libraries";
+    }
+
+    //退出登录
     @RequestMapping("logout")
-    public String logout(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().removeAttribute("name");
-        request.getSession().removeAttribute("isLogin");
-//        request.getRequestDispatcher(request.getContextPath()+"production").forward(request,response);
-        return null;
+    public String logout(HttpServletRequest request){
+ /*       request.getSession().removeAttribute("isLogin");
+        request.getSession().removeAttribute("userName");*/
+        request.getSession().invalidate();
+        return "redirect:/index.jsp";
     }
 }

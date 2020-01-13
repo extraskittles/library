@@ -9,16 +9,16 @@
 <html>
 <head>
     <title>Title</title>
-    <link href="/css/index.css" rel="stylesheet"/>
+  <%--  <link href="/css/index.css" rel="stylesheet"/>
     <script src="/js/jquery-1.3.2.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="/js/index.js"></script>--%>
+
 </head>
 <body>
-<a href="/production">访客模式浏览商品</a><br>
 <div>
-        <form action="/production" method="post" onsubmit="return check();">
+        <form action="/handleLibrary" method="post" >
             <h3>用户名密码登录</h3>
-            <input id="userName" type="text" name="name" placeholder="用户名"><br>
+            <input id="userName" type="text" name="userName" placeholder="用户名"><br>
             <input id="password" type="password" name="password" placeholder="密码">
             <span id="tips"></span> <br>
             <input id="submit" type="submit" value="登录">&nbsp;&nbsp;&nbsp;&nbsp;<a href="/register">没有账号？</a>

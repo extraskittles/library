@@ -9,21 +9,52 @@
        http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--SpringMVC扫描skittles包，只包含Controller的注解-->
     <context:component-scan base-package="skittles">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+    <!---->
+    <!--开启视图解析器，匹配/WEB-INF/pages下，后缀为.jsp的文件-->
     <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"></property>
         <property name="suffix" value=".jsp"></property>
     </bean>
 
+
+    <!--SpringMVC不过滤js和css的文件-->
     <mvc:resources mapping="/js/**" location="/js/"></mvc:resources>
     <mvc:resources mapping="/css/**" location="/css/"></mvc:resources>
+
+    <!--开启springMvc拦截器-->
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean class="skittles.interceptor.RegisterInterceptor"></bean>
+            <mvc:exclude-mapping path="/index.jsp"/>
+            <mvc:exclude-mapping path="/register"/>
+            <mvc:exclude-mapping path="/register_success"/>
+            <mvc:exclude-mapping path="/handleLibrary"/>
+            <bean class="skittles.interceptor.LoginInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>
+    <!--开启SpringMVC扫描-->
     <mvc:annotation-driven></mvc:annotation-driven>
+
+    <bean id="freemarkerConfiguration"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:freemarker.properties" />
+    </bean>
+    <!-- html视图解析器 必须先配置freemarkerConfig,注意html是没有prefix前缀属性的 -->
+    <bean id="freemarkerConfig"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="freemarkerSettings" ref="freemarkerConfiguration" />
+        <property name="templateLoaderPath">
+            <value>/WEB-INF/html/</value>
+        </property>
+    </bean>
+    <bean id="htmlviewResolver"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="suffix" value=".html" />
+        <property name="order" value="0"></property>
+        <property name="contentType" value="text/html;charset=UTF-8"></property>
+    </bean>
 </beans>
